@@ -124,7 +124,17 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# my settings.
+# Custom settings.
+#_______________________________________________________________________________________
 
-#custom user.
+# custom user.
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+# rest_framework.
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
