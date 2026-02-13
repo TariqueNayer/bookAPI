@@ -131,10 +131,13 @@ STATIC_URL = 'static/'
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 # rest_framework.
-
 REST_FRAMEWORK = {
 
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ]
 }
+
+# for user uploaded media.
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"

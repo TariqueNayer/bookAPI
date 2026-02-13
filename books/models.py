@@ -10,8 +10,16 @@ class Book(models.Model):
 		editable=False,
 	)
 	title = models.CharField(max_length=200)
+
 	author = models.CharField(max_length=500)
+
 	description = models.TextField()
+
+	pdf_file = models.FileField(upload_to='books/pdf_file/', blank=True)
+
+	uploaded_at = models.DateTimeField(auto_now_add=True)
+	
+	price = models.DecimalField(max_digits=6, decimal_places=2)
 
 	def __str__(self):
 		return self.title
@@ -44,7 +52,9 @@ class Order(models.Model):
 
 	book_history = models.CharField(max_length=500, editable=False, help_text="Stores UUID | Title | [Status]")
 
-	
+	created_at = models.DateTimeField(auto_now_add=True)
+
+	price = models.DecimalField(max_digits=6, decimal_places=2)
 
 	status = models.CharField(
 		max_length=2,
@@ -63,6 +73,7 @@ class Order(models.Model):
 
 		if self._state.adding and self.book:
 			self.book_history = f"{self.book.id} | {self.book.title}"
+			self.price = self.book.price
 
 		super().save(*args, **kwargs)
 
