@@ -130,3 +130,4 @@ pypi-upload.sh
 
 #custom
 /staticfiles/
+/media/

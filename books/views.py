@@ -1,5 +1,7 @@
 from rest_framework import generics, permissions, viewsets
 from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
 
 from .models import Book, Order, Order_Status
 from .serializers import AdminBookSerializer, OrderSerializer, PublicBookSerializer
@@ -69,7 +71,7 @@ class UserOrderViewSet(viewsets.ModelViewSet):
         return Response({
             "message": "Proceed to payment",
             "order_id": order.id,
-            "amount": order.total_price
+            "amount": order.price
         })
 
 
