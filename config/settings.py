@@ -42,12 +42,24 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+     'django.contrib.sites',
 
     #third-party apps.
     'rest_framework',
+    'rest_framework.authtoken',
+
+    #auth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 ]
 
 MIDDLEWARE = [
+    "allauth.account.middleware.AccountMiddleware", # allauth
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -133,11 +145,46 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 # rest_framework.
 REST_FRAMEWORK = {
 
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        'rest_framework.authentication.SessionAuthentication', # Optional, good for browsable API
+    ],
+
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ]
 }
+REST_AUTH = {
+    'USE_JWT': True,
+    'JWT_AUTH_COOKIE': 'bookapi-auth',         
+    'JWT_AUTH_REFRESH_COOKIE': 'bookapi-refresh-token', 
+    'JWT_AUTH_HTTPONLY': True,                 # Security best practice
+    'JWT_AUTH_SECURE': False,                  # Set to True in production
+}
+
+
 
 # for user uploaded media.
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+
+# for allauth 
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+    
+]
+
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['username',"email*", "password1*"]
+
+ACCOUNT_EMAIL_VERIFICATION = 'none' # for email verification
+LOGIN_URL = '/api/auth/login/'
+
