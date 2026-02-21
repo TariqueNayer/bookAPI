@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from environs import Env
+
+env = Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6pdl3dzur2kj8o294c7b%j6wmzizdi3hpvy(ijy7y!m0w4p1ud'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -156,10 +160,10 @@ REST_FRAMEWORK = {
 }
 REST_AUTH = {
     'USE_JWT': True,
-    'JWT_AUTH_COOKIE': 'bookapi-auth',         
-    'JWT_AUTH_REFRESH_COOKIE': 'bookapi-refresh-token', 
-    'JWT_AUTH_HTTPONLY': True,                 # Security best practice
-    'JWT_AUTH_SECURE': False,                  # Set to True in production
+    'JWT_AUTH_COOKIE': 'bookapi-auth',
+    'JWT_AUTH_REFRESH_COOKIE': 'bookapi-refresh-token',
+    'JWT_AUTH_HTTPONLY': True,
+    'JWT_AUTH_SECURE': not DEBUG,
 }
 
 
@@ -186,5 +190,18 @@ ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['username',"email*", "password1*"]
 
 ACCOUNT_EMAIL_VERIFICATION = 'none' # for email verification
-LOGIN_URL = '/api/auth/login/'
+LOGIN_URL = '/api/v1/auth/login/'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': env('GOOGLE_CLIENT_ID'),
+            'secret': env('GOOGLE_CLIENT_SECRET'),
+            'key': '' # Leave empty for Google
+        },
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'OAUTH_PKCE_ENABLED': True,
+    }
+}
 
