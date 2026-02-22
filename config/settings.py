@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from environs import Env
+from datetime import timedelta
 
 env = Env()
 env.read_env()
@@ -35,59 +36,59 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    # my apps.
-    'books.apps.BooksConfig',
-    'accounts.apps.AccountsConfig',
+	# my apps.
+	'books.apps.BooksConfig',
+	'accounts.apps.AccountsConfig',
 
-    # default apps.
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-     'django.contrib.sites',
+	# default apps.
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
+	'django.contrib.sites',
 
-    #third-party apps.
-    'rest_framework',
-    'rest_framework.authtoken',
+	#third-party apps.
+	'rest_framework',
+	'rest_framework.authtoken',
 
-    #auth
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+	#auth
+	'allauth',
+	'allauth.account',
+	'allauth.socialaccount',
+	'allauth.socialaccount.providers.google',
 
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
+	'dj_rest_auth',
+	'dj_rest_auth.registration',
 ]
 
 MIDDLEWARE = [
-    "allauth.account.middleware.AccountMiddleware", # allauth
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	"allauth.account.middleware.AccountMiddleware", # allauth
+	'django.middleware.security.SecurityMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
+	{
+		'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		'DIRS': [],
+		'APP_DIRS': True,
+		'OPTIONS': {
+			'context_processors': [
+				'django.template.context_processors.request',
+				'django.contrib.auth.context_processors.auth',
+				'django.contrib.messages.context_processors.messages',
+			],
+		},
+	},
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -97,10 +98,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+	'default': {
+		'ENGINE': 'django.db.backends.sqlite3',
+		'NAME': BASE_DIR / 'db.sqlite3',
+	}
 }
 
 
@@ -108,18 +109,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+	{
+		'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+	},
 ]
 
 
@@ -149,24 +150,30 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 # rest_framework.
 REST_FRAMEWORK = {
 
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-        'rest_framework.authentication.SessionAuthentication', # Optional, good for browsable API
-    ],
+	'DEFAULT_AUTHENTICATION_CLASSES': [
+		'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+		'rest_framework.authentication.SessionAuthentication', # Optional, good for browsable API
+	],
 
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
+	'DEFAULT_PERMISSION_CLASSES': [
+		'rest_framework.permissions.AllowAny',
+	]
 }
 REST_AUTH = {
-    'USE_JWT': True,
-    'JWT_AUTH_COOKIE': 'bookapi-auth',
-    'JWT_AUTH_REFRESH_COOKIE': 'bookapi-refresh-token',
-    'JWT_AUTH_HTTPONLY': True,
-    'JWT_AUTH_SECURE': not DEBUG,
+	'USE_JWT': True,
+	'JWT_AUTH_COOKIE': 'bookapi-auth',
+	'JWT_AUTH_REFRESH_COOKIE': 'bookapi-refresh-token',
+	'JWT_AUTH_HTTPONLY': True,
+	'JWT_AUTH_SECURE': not DEBUG,
 }
 
+# simple jwt.
 
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
 
 # for user uploaded media.
 MEDIA_URL = "/media/"
@@ -177,13 +184,13 @@ MEDIA_ROOT = BASE_DIR / "media"
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
-    
-    # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
+	
+	# Needed to login by username in Django admin, regardless of `allauth`
+	'django.contrib.auth.backends.ModelBackend',
 
-    # `allauth` specific authentication methods, such as login by email
-    'allauth.account.auth_backends.AuthenticationBackend',
-    
+	# `allauth` specific authentication methods, such as login by email
+	'allauth.account.auth_backends.AuthenticationBackend',
+	
 ]
 
 ACCOUNT_LOGIN_METHODS = {'email'}
@@ -193,15 +200,19 @@ ACCOUNT_EMAIL_VERIFICATION = 'none' # for email verification
 LOGIN_URL = '/api/v1/auth/login/'
 
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': env('GOOGLE_CLIENT_ID'),
-            'secret': env('GOOGLE_CLIENT_SECRET'),
-            'key': '' # Leave empty for Google
-        },
-        'SCOPE': ['profile', 'email'],
-        'AUTH_PARAMS': {'access_type': 'online'},
-        'OAUTH_PKCE_ENABLED': True,
-    }
+	'google': {
+		'APP': {
+			'client_id': env('GOOGLE_CLIENT_ID'),
+			'secret': env('GOOGLE_CLIENT_SECRET'),
+			'key': '' # Leave empty for Google
+		},
+		'SCOPE': ['profile', 'email'],
+		'AUTH_PARAMS': {'access_type': 'online'},
+		'OAUTH_PKCE_ENABLED': True,
+	}
 }
+SOCIALACCOUNT_AUTO_SIGNUP = True
+ACCOUNT_UNIQUE_EMAIL = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
 
+SOCIALACCOUNT_ADAPTER = "accounts.adapters.CustomSocialAccountAdapter"
